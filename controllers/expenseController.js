@@ -46,6 +46,7 @@ export async function getAllExpenses (req, res) {
     const payload = expenses.map(expense => {
       return {
         ...expense.get(),
+        value: Number(expense.value),
         categoryName: `${categoryMap[expense.category][0].toUpperCase()}${categoryMap[expense.category].substring(1)}` || null,
         userName: userMap[expense.userId]
       };
@@ -138,7 +139,7 @@ export async function getTotalByCategory(req, res) {
         where: { category: category.id },
       });
       const totalExpense = expenseByCategory.reduce((accumulator, expense) => {
-        return accumulator + expense.value;
+        return accumulator + Number(expense.value);
       }, 0);
       payload.push({
         category: category.name,
@@ -169,7 +170,7 @@ export async function getTotalByUser(req, res) {
         where: { userId: user.id },
       });
       const totalExpense = expenseByUser.reduce((accumulator, expense) => {
-        return accumulator + expense.value;
+        return accumulator + Number(expense.value);
       }, 0);
       payload.push({
         name: `${user.firstName} ${user.lastName}`,
@@ -210,14 +211,14 @@ export async function getTotalByPaymentDate(req, res) {
     const summedData = expensesByMonthAndYear.reduce((acc, item) => {
       const key = `${item.month}-${item.year}`;
       if (acc[key]) {
-        acc[key].total += item.value;
+        acc[key].total += Number(item.value);
         acc[key].quantity += 1;
       } else {
         acc[key] = {
           month: item.month,
           year: item.year,
           quantity: 1,
-          total: item.value,
+          total: Number(item.value),
         };
       }
       return acc;

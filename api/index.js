@@ -9,6 +9,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
+
+console.log(CLIENT_URL)
 const app = express();
 
 app.use(express.json());
